@@ -4,6 +4,7 @@ import MainLayout from '@/layouts/MainLayout';
 import LoginPage from '@/pages/auth/LoginPage';
 import RegisterPage from '@/pages/auth/RegisterPage';
 import DashboardPage from '@/pages/dashboard/DashboardPage';
+import BreederReviewPage from '@/pages/breeder/BreederReviewPage';
 import RequireAuth from '@/router/RequireAuth';
 
 function App() {
@@ -17,6 +18,14 @@ function App() {
       <Route element={<RequireAuth><MainLayout /></RequireAuth>}>
         <Route path="/" element={<Navigate to="/dashboard" replace />} />
         <Route path="/dashboard" element={<DashboardPage />} />
+        <Route
+          path="/breeders"
+          element={
+            <RequireAuth roles={['super_admin', 'admin', 'verifier']}>
+              <BreederReviewPage />
+            </RequireAuth>
+          }
+        />
       </Route>
 
       <Route path="*" element={<Navigate to="/dashboard" replace />} />

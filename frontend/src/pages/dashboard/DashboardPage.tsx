@@ -1,8 +1,9 @@
-import { Card, Row, Col, Button } from 'tdesign-react';
+import { Card, Row, Col, Button, Tag } from 'tdesign-react';
 import {
-  UserIcon, DashboardIcon, ChevronRightIcon,
+  UserIcon, DashboardIcon, ChevronRightIcon, TimeIcon, CheckCircleIcon, CloseCircleIcon,
 } from 'tdesign-icons-react';
 import { useAuthStore } from '@/store/authStore';
+import { BreederStatus } from '@/api/auth';
 import './DashboardPage.less';
 
 const stats = [
@@ -23,8 +24,18 @@ const quickEntries = [
   { key: 'flow', title: '谱系可视化', desc: 'React Flow 谱系树', icon: '🗺️', route: '/pedigree', color: '#ec4899' },
 ];
 
+const statusConfig = {
+  [BreederStatus.PENDING]: { label: '审核中', theme: 'warning', icon: <TimeIcon />, color: '#f59e0b' },
+  [BreederStatus.UNDER_REVIEW]: { label: '正在审核', theme: 'warning', icon: <TimeIcon />, color: '#f59e0b' },
+  [BreederStatus.APPROVED]: { label: '已认证', theme: 'success', icon: <CheckCircleIcon />, color: '#10b981' },
+  [BreederStatus.REJECTED]: { label: '已拒绝', theme: 'danger', icon: <CloseCircleIcon />, color: '#ef4444' },
+  [BreederStatus.SUSPENDED]: { label: '已暂停', theme: 'danger', icon: <CloseCircleIcon />, color: '#ef4444' },
+};
+
 export default function DashboardPage() {
   const { user } = useAuthStore();
+  const breeder = user?.breeder;
+  const statusInfo = breeder ? statusConfig[breeder.status] : null;
 
   return (
     <div className="dashboard-page">
@@ -45,6 +56,52 @@ export default function DashboardPage() {
           </Button>
         </div>
       </div>
+
+      {breeder && statusInfo && (
+        <Card className="breeder-status-card glass-card" bordered={false}>
+          <div className="status-header">
+            <div className="status-icon" style={{ background: `${statusInfo.color}15`, color: statusInfo.color }}>
+              {statusInfo.icon}
+            </div>
+            <div className="status-info">
+              <div className="status-title">
+                育种者认证状态
+                <Tag theme={statusInfo.theme as any} size="large" style={{ marginLeft: '12px' }}>
+                  {statusInfo.label}
+                </Tag>
+              </div>
+              <div className="status-desc">
+                {breeder.status === BreederStatus.PENDING && '您的认证申请正在等待管理员审核，通常需要1-3个工作日'}
+                {breeder.status === BreederStatus.UNDER_REVIEW && '管理员正在审核您的资质材料，请耐心等待'}
+                {breeder.status === BreederStatus.APPROVED && (
+                  <>
+                    恭喜！您已通过认证，认证编号：<strong>{breeder.certificationNumber}</strong>，
+                    认证时间：{breeder.certifiedAt ? new Date(breeder.certifiedAt).toLocaleDateString('zh-CN') : '-'}
+                  </>
+                )}
+                {breeder.status === BreederStatus.REJECTED && (
+                  <>
+                    很抱歉，您的认证申请未通过。原因：<strong>{breeder.reviewNote || '资质材料不完整'}</strong>，
+                    请补充材料后重新提交申请
+                  </>
+                )}
+                {breeder.status === BreederStatus.SUSPENDED && (
+                  <>
+                    您的认证已被暂停。原因：<strong>{breeder.reviewNote || '违反平台规则'}</strong>，
+                    如有疑问请联系客服
+                  </>
+                )}
+              </div>
+            </div>
+          </div>
+          {(breeder.status === BreederStatus.REJECTED || breeder.status === BreederStatus.SUSPENDED) && (
+            <div className="status-actions">
+              <Button theme="primary">重新提交申请</Button>
+              <Button theme="default">联系客服</Button>
+            </div>
+          )}
+        </Card>
+      )}
 
       <Row gutter={16} className="stats-row">
         {stats.map((s) => (

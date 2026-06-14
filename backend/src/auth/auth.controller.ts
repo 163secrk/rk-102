@@ -1,7 +1,7 @@
 import { Controller, Post, Body, Get, UseGuards, HttpCode, HttpStatus } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
-import { RegisterDto, LoginDto } from './dto/auth.dto';
+import { RegisterDto, BreederRegisterDto, LoginDto } from './dto/auth.dto';
 import { JwtAuthGuard } from './guards/jwt.guard';
 import { GetUser } from './decorators/auth.decorator';
 import { User } from '../entities/user.entity';
@@ -12,10 +12,17 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('register')
-  @ApiOperation({ summary: '用户注册' })
+  @ApiOperation({ summary: '普通用户注册' })
   @HttpCode(HttpStatus.CREATED)
   async register(@Body() dto: RegisterDto) {
     return this.authService.register(dto);
+  }
+
+  @Post('register/breeder')
+  @ApiOperation({ summary: '育种者注册（个人/企业/机构/基地）' })
+  @HttpCode(HttpStatus.CREATED)
+  async registerBreeder(@Body() dto: BreederRegisterDto) {
+    return this.authService.registerBreeder(dto);
   }
 
   @Post('login')

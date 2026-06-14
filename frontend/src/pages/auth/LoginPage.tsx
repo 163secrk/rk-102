@@ -16,12 +16,10 @@ export default function LoginPage() {
 
   const from = (location.state as any)?.from?.pathname || '/dashboard';
 
-  const onSubmit = async (context: any) => {
-    context.e?.preventDefault();
+  const onSubmit = async ({ validateResult }: any) => {
+    if (validateResult !== true) return;
     try {
-      const values = await form.validate();
-      if (!values || typeof values === 'boolean') return;
-      const formData = values as unknown as { account: string; password: string };
+      const formData = form.getFieldsValue(true) as { account: string; password: string };
       if (!formData.account || !formData.password) return;
       await login({
         account: formData.account.trim(),

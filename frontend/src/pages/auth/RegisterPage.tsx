@@ -14,12 +14,10 @@ export default function RegisterPage() {
   const navigate = useNavigate();
   const { register, loading } = useAuthStore();
 
-  const onSubmit = async (context: any) => {
-    context.e?.preventDefault();
+  const onSubmit = async ({ validateResult }: any) => {
+    if (validateResult !== true) return;
     try {
-      const values = await form.validate();
-      if (!values || typeof values === 'boolean') return;
-      const formData = values as unknown as {
+      const formData = form.getFieldsValue(true) as {
         username: string;
         nickname?: string;
         email: string;

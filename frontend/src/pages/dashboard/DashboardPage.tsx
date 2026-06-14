@@ -69,7 +69,7 @@ export default function DashboardPage() {
       <Row gutter={16}>
         {quickEntries.map((q) => (
           <Col key={q.key} xs={12} md={6} lg={6}>
-            <Card className="entry-card glass-card" bordered={false} hoverable>
+            <Card className="entry-card glass-card" bordered={false}>
               <div className="entry-icon" style={{ background: `${q.color}15`, color: q.color }}>
                 {q.icon}
               </div>

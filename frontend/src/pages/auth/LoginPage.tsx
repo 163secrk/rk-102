@@ -1,6 +1,6 @@
-import { useState, FormEvent } from 'react';
+import { useState } from 'react';
 import { Form, Input, Button, Checkbox, Link, message } from 'tdesign-react';
-import { UserIcon, LockIcon, BrowseIcon, BrowseOffIcon } from 'tdesign-icons-react';
+import { UserIcon, LockOnIcon, BrowseIcon, BrowseOffIcon } from 'tdesign-icons-react';
 import { useNavigate, useLocation, NavigateFunction } from 'react-router-dom';
 import { useAuthStore } from '@/store/authStore';
 import './AuthPages.less';
@@ -16,14 +16,16 @@ export default function LoginPage() {
 
   const from = (location.state as any)?.from?.pathname || '/dashboard';
 
-  const onSubmit = async (e: FormEvent<any>) => {
-    e.preventDefault();
+  const onSubmit = async (context: any) => {
+    context.e?.preventDefault();
     try {
       const values = await form.validate();
-      if (!values.account || !values.password) return;
+      if (!values || typeof values === 'boolean') return;
+      const formData = values as unknown as { account: string; password: string };
+      if (!formData.account || !formData.password) return;
       await login({
-        account: values.account.trim(),
-        password: values.password,
+        account: formData.account.trim(),
+        password: formData.password,
       });
       message.success('登录成功，欢迎回到灵脉');
       setTimeout(() => navigate(from, { replace: true }), 300);
@@ -51,7 +53,7 @@ export default function LoginPage() {
             size="large"
             placeholder="用户名 / 邮箱 / 手机号"
             prefixIcon={<UserIcon />}
-            autoComplete="username"
+            autocomplete="username"
           />
         </FormItem>
 
@@ -60,13 +62,13 @@ export default function LoginPage() {
             size="large"
             type={showPwd ? 'text' : 'password'}
             placeholder="请输入密码"
-            prefixIcon={<LockIcon />}
+            prefixIcon={<LockOnIcon />}
             suffixIcon={
               <span onClick={() => setShowPwd(!showPwd)} style={{ cursor: 'pointer' }}>
                 {showPwd ? <BrowseOffIcon size="18" /> : <BrowseIcon size="18" />}
               </span>
             }
-            autoComplete="current-password"
+            autocomplete="current-password"
           />
         </FormItem>
 

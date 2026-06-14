@@ -1,7 +1,7 @@
-import { useState, FormEvent } from 'react';
+import { useState } from 'react';
 import { Form, Input, Button, Link, message } from 'tdesign-react';
 import {
-  UserIcon, LockIcon, BrowseIcon, BrowseOffIcon, MailIcon, PhoneIcon, ChatIcon } from 'tdesign-icons-react';
+  UserIcon, LockOnIcon, BrowseIcon, BrowseOffIcon, MailIcon, PhoneSearchIcon, ChatIcon } from 'tdesign-icons-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '@/store/authStore';
 import './AuthPages.less';
@@ -14,16 +14,24 @@ export default function RegisterPage() {
   const navigate = useNavigate();
   const { register, loading } = useAuthStore();
 
-  const onSubmit = async (e: FormEvent<any>) => {
-    e.preventDefault();
+  const onSubmit = async (context: any) => {
+    context.e?.preventDefault();
     try {
       const values = await form.validate();
+      if (!values || typeof values === 'boolean') return;
+      const formData = values as unknown as {
+        username: string;
+        nickname?: string;
+        email: string;
+        phone?: string;
+        password: string;
+      };
       await register({
-        username: values.username.trim(),
-        email: values.email.trim(),
-        phone: values.phone?.trim(),
-        password: values.password,
-        nickname: values.nickname?.trim(),
+        username: formData.username.trim(),
+        email: formData.email.trim(),
+        phone: formData.phone?.trim(),
+        password: formData.password,
+        nickname: formData.nickname?.trim(),
       });
       message.success('注册成功，欢迎加入灵脉');
       setTimeout(() => navigate('/dashboard', { replace: true }), 300);
@@ -68,7 +76,7 @@ export default function RegisterPage() {
         <FormItem name="phone" rules={[
           { pattern: /^1[3-9]\d{9}$/, message: '请输入有效手机号' },
         ]}>
-          <Input size="large" placeholder="手机号（可选）" prefixIcon={<PhoneIcon />} />
+          <Input size="large" placeholder="手机号（可选）" prefixIcon={<PhoneSearchIcon />} />
         </FormItem>
 
         <FormItem name="password" rules={[
@@ -83,7 +91,7 @@ export default function RegisterPage() {
             size="large"
             type={showPwd ? 'text' : 'password'}
             placeholder="至少8位，含大小写字母和数字"
-            prefixIcon={<LockIcon />}
+            prefixIcon={<LockOnIcon />}
             suffixIcon={
               <span onClick={() => setShowPwd(!showPwd)} style={{ cursor: 'pointer' }}>
                 {showPwd ? <BrowseOffIcon size="18" /> : <BrowseIcon size="18" />}
@@ -106,7 +114,7 @@ export default function RegisterPage() {
             size="large"
             type={showPwd ? 'text' : 'password'}
             placeholder="再次输入密码"
-            prefixIcon={<LockIcon />}
+            prefixIcon={<LockOnIcon />}
           />
         </FormItem>
 

@@ -1,13 +1,14 @@
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { Layout, Menu, Dropdown, Avatar, Badge, Button } from 'tdesign-react';
 import {
-  DashboardIcon, UserIcon, SettingsIcon, CloseIcon,
+  DashboardIcon, UserIcon, SettingIcon, CloseIcon,
   NotificationIcon, HelpCircleIcon, SearchIcon,
 } from 'tdesign-icons-react';
 import { useAuthStore } from '@/store/authStore';
 import './MainLayout.less';
 
-const { Header, Sider, Content } = Layout;
+const { Header, Aside, Content } = Layout;
+const { MenuItem } = Menu;
 
 const menuIcons: Record<string, JSX.Element> = {
   '/dashboard': <DashboardIcon />,
@@ -18,25 +19,25 @@ const menuIcons: Record<string, JSX.Element> = {
   '/health': <span style={{ fontSize: '16px' }}>💚</span>,
   '/ownership': <span style={{ fontSize: '16px' }}>🔄</span>,
   '/alerts': <span style={{ fontSize: '16px' }}>⏰</span>,
-  '/settings': <SettingsIcon />,
+  '/settings': <SettingIcon />,
 };
+
+const menuItems = [
+  { value: '/dashboard', label: '控制台', icon: menuIcons['/dashboard'] },
+  { value: '/breeders', label: '育种者认证', icon: menuIcons['/breeders'] },
+  { value: '/organisms', label: '数字档案', icon: menuIcons['/organisms'] },
+  { value: '/pedigree', label: '谱系树', icon: menuIcons['/pedigree'] },
+  { value: '/trace', label: '溯源二维码', icon: menuIcons['/trace'] },
+  { value: '/health', label: '健康日志', icon: menuIcons['/health'] },
+  { value: '/ownership', label: '所有权转移', icon: menuIcons['/ownership'] },
+  { value: '/alerts', label: '预警调度', icon: menuIcons['/alerts'] },
+  { value: '/settings', label: '系统设置', icon: menuIcons['/settings'] },
+];
 
 export default function MainLayout() {
   const navigate = useNavigate();
   const location = useLocation();
   const { user, logout } = useAuthStore();
-
-  const menuItems = [
-    { value: '/dashboard', label: '控制台', icon: menuIcons['/dashboard'] },
-    { value: '/breeders', label: '育种者认证', icon: menuIcons['/breeders'] },
-    { value: '/organisms', label: '数字档案', icon: menuIcons['/organisms'] },
-    { value: '/pedigree', label: '谱系树', icon: menuIcons['/pedigree'] },
-    { value: '/trace', label: '溯源二维码', icon: menuIcons['/trace'] },
-    { value: '/health', label: '健康日志', icon: menuIcons['/health'] },
-    { value: '/ownership', label: '所有权转移', icon: menuIcons['/ownership'] },
-    { value: '/alerts', label: '预警调度', icon: menuIcons['/alerts'] },
-    { value: '/settings', label: '系统设置', icon: menuIcons['/settings'] },
-  ];
 
   const handleLogout = async () => {
     await logout();
@@ -75,8 +76,8 @@ export default function MainLayout() {
           <Dropdown
             options={[
               { content: '个人中心', value: 'profile', prefixIcon: <UserIcon /> },
-              { content: '系统设置', value: 'settings', prefixIcon: <SettingsIcon /> },
-              { content: '退出登录', value: 'logout', prefixIcon: <CloseIcon />, theme: 'danger' },
+              { content: '系统设置', value: 'settings', prefixIcon: <SettingIcon /> },
+              { content: '退出登录', value: 'logout', prefixIcon: <CloseIcon /> },
             ]}
             onClick={(v) => {
               if (v.value === 'logout') handleLogout();
@@ -97,15 +98,20 @@ export default function MainLayout() {
       </Header>
 
       <Layout>
-        <Sider className="main-sider" width={232}>
+        <Aside className="main-sider" width="232px">
           <Menu
             value={location.pathname}
             theme="light"
             style={{ background: 'transparent', border: 'none' }}
             onChange={(v) => navigate(String(v))}
-            options={menuItems}
-          />
-        </Sider>
+          >
+            {menuItems.map((item) => (
+              <MenuItem key={item.value} value={item.value} icon={item.icon}>
+                {item.label}
+              </MenuItem>
+            ))}
+          </Menu>
+        </Aside>
         <Content className="main-content">
           <div className="content-inner fade-in-up">
             <Outlet />

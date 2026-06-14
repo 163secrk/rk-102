@@ -1,0 +1,107 @@
+.auth-card {
+  width: 100%;
+  max-width: 480px;
+}
+
+.auth-card-header {
+  margin-bottom: 28px;
+  text-align: center;
+}
+.card-title {
+  margin: 0 0 8px;
+  font-size: 26px;
+  font-weight: 700;
+  color: #e2e8f0;
+  letter-spacing: 1px;
+}
+.card-sub {
+  margin: 0;
+  font-size: 13px;
+  color: #94a3b8;
+}
+
+.auth-form {
+  :global {
+    .t-form__item {
+      margin-bottom: 18px;
+    }
+    .t-input__wrap {
+      background: rgba(15, 23, 42, 0.5) !important;
+      border-radius: 8px !important;
+    }
+    .t-input {
+      background: transparent !important;
+      color: #e2e8f0 !important;
+    }
+    .t-input__prefix {
+      color: #d4af37 !important;
+    }
+    .t-input__suffix {
+      color: #64748b !important;
+    }
+    .t-input--focused {
+      border-color: rgba(212, 175, 55, 0.5) !important;
+      box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1) !important;
+    }
+    .t-input--error {
+      border-color: #ef4444 !important;
+    }
+    .t-checkbox__label {
+      color: #94a3b8 !important;
+    }
+  }
+}
+
+.form-row-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.form-row-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  :global(.t-form__item) {
+    margin-bottom: 0 !important;
+  }
+  margin-bottom: 18px;
+}
+
+.submit-btn {
+  height: 46px !important;
+  font-size: 15px !important;
+  font-weight: 600 !important;
+  letter-spacing: 2px !important;
+  background: linear-gradient(135deg, #d4af37 0%, #b8962e 100%) !important;
+  border: none !important;
+  color: #0a0f1f !important;
+  border-radius: 8px !important;
+  transition: all 0.3s !important;
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4) !important;
+  }
+  &:disabled {
+    opacity: 0.7;
+  }
+}
+
+.auth-footer-switch {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 8px;
+  color: #94a3b8;
+  font-size: 13px;
+}
+
+.auth-tips {
+  margin-top: 20px;
+  padding: 10px 14px;
+  background: rgba(212, 175, 55, 0.06);
+  border-left: 3px solid rgba(212, 175, 55, 0.3);
+  border-radius: 4px;
+  p { margin: 0; font-size: 12px; color: #94a3b8; }
+}

@@ -1,0 +1,110 @@
+.main-layout {
+  min-height: 100vh;
+  background: transparent;
+}
+
+.main-header {
+  height: 64px;
+  padding: 0 24px;
+  background: rgba(15, 23, 42, 0.75) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(212, 175, 55, 0.15) !important;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.header-left { flex: 0 0 auto; }
+.header-center { flex: 1; max-width: 480px; }
+.header-right { flex: 0 0 auto; display: flex; align-items: center; gap: 8px; }
+
+.logo-mini {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.logo-text {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(30, 41, 59, 0.6);
+  border: 1px solid rgba(212, 175, 55, 0.15);
+  border-radius: 8px;
+  padding: 0 12px;
+  height: 38px;
+  color: rgba(148, 163, 184, 0.7);
+  input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #e2e8f0;
+    font-size: 13px;
+    &::placeholder { color: rgba(148, 163, 184, 0.5); }
+  }
+}
+
+.user-menu {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 10px 4px 4px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background 0.2s;
+  &:hover { background: rgba(212, 175, 55, 0.08); }
+}
+.user-meta { display: flex; flex-direction: column; line-height: 1.2; }
+.user-name { font-size: 13px; color: #e2e8f0; font-weight: 500; }
+.user-role { font-size: 11px; color: #d4af37; }
+
+.main-sider {
+  background: rgba(13, 21, 38, 0.55) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-right: 1px solid rgba(212, 175, 55, 0.1) !important;
+  padding-top: 16px;
+
+  :global {
+    .t-menu {
+      background: transparent !important;
+    }
+    .t-menu__item, .t-menu__item--plain {
+      color: #94a3b8 !important;
+      border-radius: 8px !important;
+      margin: 4px 12px !important;
+      width: calc(100% - 24px) !important;
+      transition: all 0.2s;
+      &:hover {
+        background: rgba(212, 175, 55, 0.06) !important;
+        color: #e2e8f0 !important;
+      }
+    }
+    .t-is-active {
+      background: linear-gradient(90deg, rgba(212, 175, 55, 0.18), rgba(212, 175, 55, 0.04)) !important;
+      color: #d4af37 !important;
+      border-left: 3px solid #d4af37 !important;
+      margin-left: 12px !important;
+    }
+  }
+}
+
+.main-content {
+  padding: 24px;
+  background: transparent;
+}
+
+.content-inner {
+  min-height: calc(100vh - 64px - 48px);
+}
